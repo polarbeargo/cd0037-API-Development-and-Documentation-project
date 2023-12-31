@@ -10,8 +10,25 @@
 
 3. **PIP Dependencies** - Once your virtual environment is setup and running, install the required dependencies by navigating to the `/backend` directory and running:
 
+#### Pre-requisites
+* Developers using this project should already have Python3, pip and node installed on their local machines.
+
+
+* **Start your virtual environment** 
+From the backend folder run
 ```bash
-pip install -r requirements.txt
+# Mac users
+python3 -m venv venv
+source venv/bin/activate
+# Windows users
+> py -3 -m venv venv
+> venv\Scripts\activate
+```
+* **Install dependencies**<br>
+From the backend folder run 
+```bash
+# All required packages are included in the requirements file. 
+pip3 install -r requirements.txt
 ```
 
 #### Key Pip Dependencies
@@ -23,7 +40,7 @@ pip install -r requirements.txt
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross-origin requests from our frontend server.
 
 ### Set up the Database
-
+Install Postgres on Mac or handle `zsh: command not found: psql` see this [link](https://github.com/polarbeargo/cd0046-SQL-and-Data-Modeling-for-the-Web?tab=readme-ov-file#db-migrations-in-mac).  
 With Postgres running, create a `trivia` database:
 
 ```bash
