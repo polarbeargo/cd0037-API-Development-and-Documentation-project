@@ -65,6 +65,15 @@ flask run --reload
 
 The `--reload` flag will detect file changes and restart the server automatically.
 
+### Start the Server
+
+In the backend directory, start the Flask server by running:
+``````
+export FLASK_APP=flaskr
+export FLASK_ENV=development
+flask run
+``````
+
 ## To Do Tasks
 
 These are the files you'd want to edit in the backend:
