@@ -35,7 +35,8 @@ def create_app(test_config=None):
     @app.route('/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.all()
-        formatted_categories = [category.format() for category in categories]
+        # categories data in dict format which will contain category id as key and type as value 
+        formatted_categories = {category.id: category.type for category in categories}
 
         if categories is None:
             abort(404)
@@ -74,7 +75,8 @@ def create_app(test_config=None):
         current_questions = paginate_questions(request, selection)
 
         categories = Category.query.all()
-        formatted_categories = [category.format() for category in categories]
+        # categories data in dict format which will contain category id as key and type as value 
+        formatted_categories = {category.id: category.type for category in categories}
 
         if len(current_questions) == 0:
             abort(404)
