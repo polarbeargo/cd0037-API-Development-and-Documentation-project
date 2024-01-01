@@ -29,7 +29,16 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser. T
 ```bash
 npm start
 ```
-
+If encounter an error like this:
+```
+digital envelope routines::unsupported
+``````
+You can try to run this command:
+```
+sudo npm install -g n 
+sudo n 14.17.3     // 14.17.3 is the version of nodejs
+node -v   
+``````
 ### Request Formatting
 
 The frontend should be fairly straightforward and disgestible. You'll primarily work within the `components` folder in order to understand, and if you so choose edit, the endpoints utilized by the components. While working on your backend request handling and response formatting, you can reference the frontend to view how it parses the responses.
