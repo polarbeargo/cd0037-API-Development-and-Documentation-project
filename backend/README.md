@@ -296,11 +296,11 @@ The API will return three error types when requests fail:
 ```
 {
   "question": {
-    "answer": "test", 
+    "answer": "Muhammad Ali", 
     "category": 4, 
     "difficulty": 1, 
-    "id": 24, 
-    "question": "test"
+    "id": 9, 
+    "question": "What boxer's original name is Cassius Clay?"
   }, 
   "success": true
 }
