@@ -8,6 +8,7 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -23,8 +24,12 @@ def create_app(test_config=None):
     """
     @app.after_request
     def after_request(response):
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+        response.headers.add(
+            'Access-Control-Allow-Headers',
+            'Content-Type, Authorization')
+        response.headers.add(
+            'Access-Control-Allow-Methods',
+            'GET, POST, PATCH, DELETE, OPTIONS')
         return response
 
     """
@@ -35,17 +40,18 @@ def create_app(test_config=None):
     @app.route('/categories', methods=['GET'])
     def get_categories():
         categories = Category.query.all()
-        # categories data in dict format which will contain category id as key and type as value 
-        formatted_categories = {category.id: category.type for category in categories}
+        # categories data in dict format which will contain category id as key
+        # and type as value
+        formatted_categories = {
+            category.id: category.type for category in categories}
 
         if categories is None:
             abort(404)
-        
+
         return jsonify({
             'success': True,
             'categories': formatted_categories
         })
-
 
     """
     @TODO:
@@ -59,22 +65,26 @@ def create_app(test_config=None):
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions.
     """
-    
+
     @app.route('/questions', methods=['GET'])
     def get_questions():
         try:
             selection = Question.query.order_by(Question.id).all()
             # Use the paginate method already provide in the flask-sqlalchemy
-            current_questions = Question.query.order_by(Question.id).paginate(page=1, per_page=QUESTIONS_PER_PAGE).items
+            current_questions = Question.query.order_by(
+                Question.id).paginate(
+                page=1, per_page=QUESTIONS_PER_PAGE).items
 
-            current_questions = [question.format() for question in current_questions]
+            current_questions = [question.format()
+                                 for question in current_questions]
             categories = Category.query.all()
-            # categories data in dict format which will contain category id as key and type as value 
-            formatted_categories = {category.id: category.type for category in categories}
+            # categories data in dict format which will contain category id as
+            # key and type as value
+            formatted_categories = {
+                category.id: category.type for category in categories}
 
             if len(current_questions) == 0:
                 abort(404)
-       
 
             return jsonify({
                 'success': True,
@@ -83,11 +93,10 @@ def create_app(test_config=None):
                 'categories': formatted_categories,
                 'current_category': None
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
-
 
     """
     @TODO:
@@ -99,18 +108,19 @@ def create_app(test_config=None):
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
         try:
-            question = Question.query.filter(Question.id == question_id).one_or_none()
+            question = Question.query.filter(
+                Question.id == question_id).one_or_none()
 
             if question is None:
                 abort(404)
-        
+
             question.delete()
 
             return jsonify({
                 'success': True,
                 'deleted': question_id
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
@@ -139,20 +149,24 @@ def create_app(test_config=None):
 
         if question is None or answer is None or difficulty is None or category is None:
             abort(422)
-        
+
         try:
-            question = Question(question=question, answer=answer, difficulty=difficulty, category=category)
+            question = Question(
+                question=question,
+                answer=answer,
+                difficulty=difficulty,
+                category=category)
             question.insert()
 
             return jsonify({
                 'success': True,
                 'created': question.id
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
-            
+
     """
     @TODO:
     Create a POST endpoint to get questions based on a search term.
@@ -169,17 +183,21 @@ def create_app(test_config=None):
 
         if body is None:
             abort(400)
-        
+
         search_term = body.get('searchTerm', None)
 
         if search_term is None:
             abort(422)
-        
+
         try:
-            selection = Question.query.filter(Question.question.ilike(f'%{search_term}%')).all()
+            selection = Question.query.filter(
+                Question.question.ilike(f'%{search_term}%')).all()
             # Use the paginate method already provide in the flask-sqlalchemy
-            current_questions = Question.query.filter(Question.question.ilike(f'%{search_term}%')).paginate(page=1, per_page=QUESTIONS_PER_PAGE).items
-            current_questions = [question.format() for question in current_questions]
+            current_questions = Question.query.filter(
+                Question.question.ilike(f'%{search_term}%')).paginate(
+                page=1, per_page=QUESTIONS_PER_PAGE).items
+            current_questions = [question.format()
+                                 for question in current_questions]
 
             return jsonify({
                 'success': True,
@@ -187,11 +205,11 @@ def create_app(test_config=None):
                 'total_questions': len(selection),
                 'current_category': None
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
-        
+
     """
     @TODO:
     Create a GET endpoint to get questions based on category.
@@ -203,22 +221,27 @@ def create_app(test_config=None):
     @app.route('/categories/<int:category_id>/questions', methods=['GET'])
     def get_questions_by_category(category_id):
         try:
-            category = Category.query.filter(Category.id == category_id).one_or_none()
+            category = Category.query.filter(
+                Category.id == category_id).one_or_none()
 
             if category is None:
                 abort(404)
-        
-            selection = Question.query.filter(Question.category == category_id).all()
+
+            selection = Question.query.filter(
+                Question.category == category_id).all()
             # Use the paginate method already provide in the flask-sqlalchemy
-            current_questions = Question.query.filter(Question.category == category_id).paginate(page=1, per_page=QUESTIONS_PER_PAGE).items
-            current_questions = [question.format() for question in current_questions]
+            current_questions = Question.query.filter(
+                Question.category == category_id).paginate(
+                page=1, per_page=QUESTIONS_PER_PAGE).items
+            current_questions = [question.format()
+                                 for question in current_questions]
             return jsonify({
                 'success': True,
                 'questions': current_questions,
                 'total_questions': len(selection),
                 'current_category': category.type
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
@@ -240,29 +263,31 @@ def create_app(test_config=None):
 
             if body is None:
                 abort(400)
-        
+
             previous_questions = body.get('previous_questions', None)
             quiz_category = body.get('quiz_category', None)
 
             if previous_questions is None or quiz_category is None:
                 abort(422)
-        
+
             if quiz_category['id'] == 0:
                 questions = Question.query.all()
             else:
-                # Use notin_() method of SQLAlchemy to check if the question id is not in the previous questions
-                questions = Question.query.filter(Question.category == quiz_category['id'] and Question.id.notin_(previous_questions)).all()
-        
+                # Use notin_() method of SQLAlchemy to check if the question id
+                # is not in the previous questions
+                questions = Question.query.filter(
+                    Question.category == quiz_category['id'] and Question.id.notin_(previous_questions)).all()
+
             if len(questions) == 0:
                 abort(404)
 
             question = random.choice(questions)
-          
+
             return jsonify({
                 'success': True,
                 'question': question.format()
             })
-        
+
         except Exception as e:
             print(e)
             abort(422)
@@ -279,7 +304,7 @@ def create_app(test_config=None):
             'error': 400,
             'message': 'Bad request'
         }), 400
-    
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -287,7 +312,7 @@ def create_app(test_config=None):
             'error': 404,
             'message': 'Not found'
         }), 404
-    
+
     @app.errorhandler(422)
     def unprocessable(error):
         return jsonify({
@@ -295,6 +320,5 @@ def create_app(test_config=None):
             'error': 422,
             'message': 'Unprocessable'
         }), 422
-        
-    return app
 
+    return app

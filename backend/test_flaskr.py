@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 DB_HOST = os.getenv('DB_HOST')
 TEST_DB_NAME = os.getenv('DB_TEST_NAME')
 
+
 class TriviaTestCase(unittest.TestCase):
     """This class represents the trivia test case"""
 
@@ -26,7 +27,7 @@ class TriviaTestCase(unittest.TestCase):
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-    
+
     def tearDown(self):
         """Executed after reach test"""
         pass
@@ -58,7 +59,7 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-    
+
     def test_delete_question(self):
         res = self.client().delete('/questions/10')
         data = json.loads(res.data)
